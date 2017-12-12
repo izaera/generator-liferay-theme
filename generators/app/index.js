@@ -74,27 +74,25 @@ module.exports = yeoman.generators.Base.extend({
 
 	writing: {
 		app: function() {
+      this.fs.copy(this.templatePath('gradle/**'), this.destinationPath('gradle'));
+
 			this.template('_package.json', 'package.json', this);
+      this.template('bnd.bnd', 'bnd.bnd', this);
+      this.template('build.gradle', 'build.gradle', this);
 
 			this.fs.copy(this.templatePath('gitignore'), this.destinationPath('.gitignore'));
+      this.fs.copy(this.templatePath('gradlew'), this.destinationPath('gradlew'));
+      this.fs.copy(this.templatePath('gradlew.bat'), this.destinationPath('gradlew.bat'));
 
 			this.template('gulpfile.js', 'gulpfile.js', this);
 		},
 
 		projectfiles: function() {
-			this.fs.copy(this.templatePath('src/**'), this.destinationPath('src'), {
-				globOptions: {
-					ignore: this.templatePath('src/css/custom.css')
-				}
-			});
-
-			var customCssName = '_custom.scss';
-
-			this.fs.copy(this.templatePath('src/css/custom.css'), this.destinationPath('src/css/' + customCssName));
+			this.fs.copy(this.templatePath('src/**'), this.destinationPath('src'));
 
 			this.template(
-				'src/WEB-INF/liferay-plugin-package.properties',
-				'src/WEB-INF/liferay-plugin-package.properties',
+				'src/main/resources/META-INF/resources/WEB-INF/liferay-plugin-package.properties',
+				'src/main/resources/META-INF/resources/WEB-INF/liferay-plugin-package.properties',
 				{
 					liferayVersion: this.liferayVersion,
 					liferayVersions: this.liferayVersion + '.0+',
@@ -102,7 +100,10 @@ module.exports = yeoman.generators.Base.extend({
 				}
 			);
 
-			this.template('src/WEB-INF/liferay-look-and-feel.xml', 'src/WEB-INF/liferay-look-and-feel.xml', this);
+			this.template(
+        'src/main/resources/META-INF/resources/WEB-INF/liferay-look-and-feel.xml',
+        'src/main/resources/META-INF/resources/WEB-INF/liferay-look-and-feel.xml',
+        this);
 		}
 	},
 
